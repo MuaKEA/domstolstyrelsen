@@ -1,0 +1,4 @@
+namespace: test
+service:
+  port: 8080
+  nodePort: 30081

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: domstolstyrelsen
+description: Samme app i stage, test og prod
+type: application
+version: 0.1.0
+appVersion: "1"

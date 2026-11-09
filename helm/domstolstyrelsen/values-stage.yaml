@@ -1,0 +1,4 @@
+namespace: stage
+service:
+  port: 8080
+  nodePort: 30080

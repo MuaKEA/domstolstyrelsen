@@ -1,0 +1,11 @@
+namespace: stage
+replicaCount: 3
+
+image:
+  repository: domstolstyrelsen
+  tag: "1"
+  pullPolicy: Never
+
+service:
+  port: 8080
+  nodePort: 30080

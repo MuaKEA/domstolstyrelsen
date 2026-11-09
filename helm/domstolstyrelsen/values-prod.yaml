@@ -1,0 +1,4 @@
+namespace: prod
+service:
+  port: 8080
+  nodePort: 30082
