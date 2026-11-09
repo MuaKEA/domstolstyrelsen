@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stage
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MuaKEA/domstolstyrelsen.git
+    targetRevision: cursor/namespace-and-replica
+    path: helm/domstolstyrelsen
+    helm:
+      valueFiles:
+        - values-stage.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
