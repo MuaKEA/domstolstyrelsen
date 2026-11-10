@@ -1,4 +1,6 @@
 namespace: test
+image:
+  tag: testLatest
 service:
   port: 8080
   nodePort: 30081

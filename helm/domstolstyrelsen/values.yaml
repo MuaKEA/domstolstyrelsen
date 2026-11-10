@@ -2,9 +2,9 @@ namespace: stage
 replicaCount: 3
 
 image:
-  repository: domstolstyrelsen
-  tag: "1"
-  pullPolicy: Never
+  repository: altair2400/domstolsstyrelsen
+  tag: stageLatest
+  pullPolicy: Always
 
 service:
   port: 8080

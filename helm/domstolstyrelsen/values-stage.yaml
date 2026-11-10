@@ -1,4 +1,6 @@
 namespace: stage
+image:
+  tag: stageLatest
 service:
   port: 8080
   nodePort: 30080

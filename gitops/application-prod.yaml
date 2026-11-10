@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/MuaKEA/domstolstyrelsen.git
-    targetRevision: cursor/namespace-and-replica
+    targetRevision: prod
     path: helm/domstolstyrelsen
     helm:
       valueFiles:

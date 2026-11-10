@@ -1,4 +1,6 @@
 namespace: prod
+image:
+  tag: prodLatest
 service:
   port: 8080
   nodePort: 30082
