@@ -3,7 +3,7 @@ name: Build and push image
 on:
   push:
     branches:
-      - stage
+      - staging
       - test
       - prod
   workflow_dispatch:
@@ -21,8 +21,16 @@ jobs:
           username: altair2400
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - id: image
+        run: |
+          case "$GITHUB_REF_NAME" in
+            staging) echo "tag=stageLatest" >> "$GITHUB_OUTPUT" ;;
+            test) echo "tag=testLatest" >> "$GITHUB_OUTPUT" ;;
+            prod) echo "tag=prodLatest" >> "$GITHUB_OUTPUT" ;;
+          esac
+
       - uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: altair2400/domstolsstyrelsen:${{ github.ref_name }}Latest
+          tags: altair2400/domstolsstyrelsen:${{ steps.image.outputs.tag }}
