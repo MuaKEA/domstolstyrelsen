@@ -3,13 +3,17 @@ name: Build and push image
 on:
   push:
     branches:
-      - cursor/namespace-and-replica
+      - staging
+      - test
     paths:
       - Dockerfile
       - pom.xml
       - src/**
       - .github/workflows/docker-image.yml
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   push:
@@ -24,10 +28,32 @@ jobs:
           username: altair2400
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - id: tag
+        run: echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
       - uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            altair2400/domstolsstyrelsen:latest
-            altair2400/domstolsstyrelsen:${{ github.sha }}
+            altair2400/domstolsstyrelsen:${{ github.ref_name }}
+            altair2400/domstolsstyrelsen:${{ steps.tag.outputs.short }}
+
+      - name: Point Helm at the new image
+        run: |
+          python3 - << PY
+          import re
+          from pathlib import Path
+          path = Path("helm/domstolstyrelsen/values.yaml")
+          text = path.read_text()
+          short = "${{ steps.tag.outputs.short }}"
+          text = re.sub(r"repository: .*", "repository: altair2400/domstolsstyrelsen", text)
+          text = re.sub(r'tag: ".*"', f'tag: "{short}"', text)
+          text = re.sub(r"pullPolicy: .*", "pullPolicy: IfNotPresent", text)
+          path.write_text(text)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add helm/domstolstyrelsen/values.yaml
+          git commit -m "Deploy image ${{ steps.tag.outputs.short }} [skip ci]"
+          git push
